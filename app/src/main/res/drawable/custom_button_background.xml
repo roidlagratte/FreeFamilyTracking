@@ -1,0 +1,24 @@
+<!-- Fichier : res/drawable/custom_button_background.xml -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- État pressé -->
+    <item android:state_pressed="true">
+        <shape>
+            <solid android:color="@color/rose" />
+            <corners android:radius="148dp" />
+        </shape>
+    </item>
+    <!-- État par défaut -->
+    <item>
+        <shape>
+            <solid android:color="@android:color/black" /> <!-- Modifier ici -->
+            <corners android:radius="148dp" />
+        </shape>
+    </item>
+    <!-- Ajout d'un état pour spécifier la couleur quand le bouton n'est pas sélectionné -->
+    <item android:state_enabled="false">
+        <shape>
+            <solid android:color="@android:color/black" />
+            <corners android:radius="148dp" />
+        </shape>
+    </item>
+</selector>

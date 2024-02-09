@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="FreeFamilyTracking" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Couleur de fond de la barre d'action -->
+        <item name="colorPrimary">@android:color/black</item>
+        <!-- Couleur du texte de la barre d'action -->
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <!-- Style pour le texte général -->
+        <item name="android:textAppearance">@style/TextAppearance.FreeFamilyTracking</item>
+        <!-- Style pour les boutons -->
+        <item name="android:buttonStyle">@style/Button.FreeFamilyTracking</item>
+        <!-- Autres attributs de style ici -->
+    </style>
+
+    <style name="TextAppearance.FreeFamilyTracking" parent="TextAppearance.AppCompat">
+        <!-- Couleur du texte général -->
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+
+
+    <style name="Button.FreeFamilyTracking" parent="Widget.AppCompat.Button">
+        <!-- Couleur du texte des boutons -->
+        <item name="android:textColor">@android:color/white</item>
+        <!-- Couleur de fond des boutons -->
+        <item name="android:background">@drawable/custom_button_background</item>
+        <!-- Ajoutez ces deux lignes pour spécifier les coins arrondis et l'espacement du texte -->
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <!-- Couleur par défaut du bouton -->
+        <item name="colorButtonNormal">@android:color/black</item>
+    </style>
+
+
+
+    <style name="EditText.FreeFamilyTracking" parent="Widget.AppCompat.EditText">
+        <!-- Couleur du texte de l'EditText -->
+        <item name="android:textColor">@android:color/black</item>
+        <!-- Autres attributs de style pour l'EditText ici -->
+    </style>
+
+
+
+
+</resources>
