@@ -81,7 +81,7 @@ class MyBackgroundService : Service() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         handler.postDelayed(object : Runnable {
             override fun run() {
-                Log.d("MyBackgroundService", "Sending location update...")
+                Log.d("MyBackgroundService", "Sending location update with INTERVAL=$INTERVAL...")
                 if (checkLocationPermission()) {
                     getLastLocation { location ->
                         location?.let {

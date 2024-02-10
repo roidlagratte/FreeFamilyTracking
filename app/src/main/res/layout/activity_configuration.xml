@@ -23,48 +23,80 @@
     <EditText
         android:id="@+id/edtPeriod"
         style="@style/EditText.FreeFamilyTracking"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="68dp"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="36dp"
         android:hint="Période (en secondes)"
         android:inputType="number"
         android:padding="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.418"
+        app:layout_constraintEnd_toStartOf="@id/txtSavedValue"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txtResultValue" />
+        app:layout_constraintTop_toBottomOf="@id/my_toolbar" />
+
+    <TextView
+        android:id="@+id/txtSavedValue"
+        android:layout_width="0dp"
+        android:layout_height="58dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/edtPeriod"
+        app:layout_constraintTop_toTopOf="@id/edtPeriod" />
+
+    <EditText
+        android:id="@+id/edtName"
+        style="@style/EditText.FreeFamilyTracking"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="56dp"
+        android:hint="Nom"
+        android:inputType="text"
+        android:padding="20dp"
+        app:layout_constraintEnd_toStartOf="@id/txtName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edtPeriod" />
+
+    <TextView
+        android:id="@+id/txtName"
+        android:layout_width="0dp"
+        android:layout_height="58dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/edtName"
+        app:layout_constraintTop_toTopOf="@id/edtName" />
+
+    <EditText
+        android:id="@+id/edtGroupName"
+        style="@style/EditText.FreeFamilyTracking"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="76dp"
+        android:hint="Nom du groupe"
+        android:inputType="text"
+        android:padding="20dp"
+        app:layout_constraintEnd_toStartOf="@id/txtGroupName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edtName" />
+
+    <TextView
+        android:id="@+id/txtGroupName"
+        android:layout_width="0dp"
+        android:layout_height="58dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/edtGroupName"
+        app:layout_constraintTop_toTopOf="@id/edtGroupName" />
 
     <Button
         android:id="@+id/btnSavePeriod"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="120dp"
         android:text="Enregistrer la période"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.483"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/my_toolbar" />
-
-
-    <TextView
-        android:id="@+id/txtSavedValue"
-        android:layout_width="255dp"
-        android:layout_height="99dp"
-        android:layout_marginTop="52dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnSavePeriod" />
-
-
-    <TextView
-        android:id="@+id/txtResultValue"
-        android:layout_width="230dp"
-        android:layout_height="97dp"
-        android:layout_marginTop="40dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.416"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txtSavedValue" />
+        app:layout_constraintTop_toBottomOf="@id/txtGroupName" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
