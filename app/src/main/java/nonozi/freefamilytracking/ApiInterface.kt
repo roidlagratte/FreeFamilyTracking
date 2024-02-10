@@ -11,4 +11,8 @@ interface ApiInterface {
 
     @POST("/api/index.php")
     fun postHeros(@Body postRequestModel: PostRequestModel?): Call<PostResponseModel?>?
+
+    @POST("/api/getcoordinates.php")
+    fun getCoordinates(@Body postRequestMap: PostRequestMap?): Call<PostResponseMap?>?
+
 }

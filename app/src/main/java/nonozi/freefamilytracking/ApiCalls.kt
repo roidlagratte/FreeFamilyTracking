@@ -10,4 +10,8 @@ class ApiCalls(private val apiInterface: ApiInterface) {
         return apiInterface.postHeros(postRequestModel)
     }
 
+    fun getCoordinates(postRequestMap: PostRequestMap?): Call<PostResponseMap?>? {
+        return apiInterface.getCoordinates(postRequestMap)
+    }
+
 }

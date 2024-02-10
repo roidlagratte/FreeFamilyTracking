@@ -41,7 +41,7 @@ class MyBackgroundService : Service() {
     private var currentLongitude: Double = 0.0
     private val channelId = "MyForegroundServiceChannel"
     private val handler = Handler()
-    private var INTERVAL = 5000L
+    private var INTERVAL = 60000L
     val dataStoreManager = DataStoreManager(this)
     companion object {
         const val ACTION_UPDATE_PERIOD = "nonozi.freefamilytracking.UPDATE_PERIOD"
@@ -50,21 +50,8 @@ class MyBackgroundService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d("MyBackgroundService", "Starting service...")
         startForeground(1, createNotification()) // Ajoutez cette ligne pour démarrer le service en mode foreground
-        val savedPeriod = intent?.getIntExtra(EXTRA_PERIOD, 5000) ?: 5000
+        val savedPeriod = intent?.getIntExtra(EXTRA_PERIOD, 60000) ?: 60000 // default 60 sec
         INTERVAL = savedPeriod.toLong()
-
-        // Lire la valeur enregistrée dans le DataStore et l'utiliser pour INTERVAL
-       /* lifecycleScope.launchWhenStarted {
-            val savedValue = dataStoreManager.readPeriod().first()
-    }
-        lifecycleScope.launch {
-            val savedPeriod = dataStoreManager.readPeriod().first()
-            INTERVAL = savedPeriod.toLong()
-        } */
-
-
-
-
 
         if (intent != null && intent.action == ACTION_UPDATE_PERIOD) {
            var newPeriod = intent.getIntExtra(EXTRA_PERIOD, 3000)

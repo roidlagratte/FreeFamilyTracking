@@ -9,7 +9,7 @@ class RetrofitBuilder private constructor() {
     var BASE_URL_POST = "https://nonozi2.ddns.net"
     var BASE_URL_GET = "https://nonozi2.ddns.net"
     private var builder: Retrofit.Builder? = null
-    private var apiInterface: ApiInterface? = null
+    public var apiInterface: ApiInterface? = null
 
     companion object {
         var instance: RetrofitBuilder? = null
