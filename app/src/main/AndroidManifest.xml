@@ -14,8 +14,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.FreeFamilyTracking"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:targetApi="31" >
+
         <service
             android:name=".MyBackgroundService"
             android:foregroundServiceType="location|dataSync|connectedDevice"
@@ -29,6 +30,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ConfigurationActivity"
+            android:label="ConfigurationActivity"/>
+        <activity android:name=".MapActivity" />
     </application>
 
 </manifest>
