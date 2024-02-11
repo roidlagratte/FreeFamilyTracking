@@ -1,6 +1,7 @@
 package nonozi.freefamilytracking
 
 import android.Manifest
+import android.app.ActivityManager
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -27,6 +28,7 @@ import kotlinx.coroutines.launch
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.flow.first
+
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -34,7 +36,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class MyBackgroundService : Service() {
-    private var timer: Timer? = null
+    var timer: Timer? = null
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var retrofitBuilder: RetrofitBuilder? = RetrofitBuilder.instance
     private var currentLatitude: Double = 0.0
@@ -43,15 +45,47 @@ class MyBackgroundService : Service() {
     private val handler = Handler()
     private var INTERVAL = 60000L
     val dataStoreManager = DataStoreManager(this)
+    private lateinit var savedName: String
+    private lateinit var savedGroupName: String
+
     companion object {
+        fun isServiceRunning(context: Context): Boolean {
+            val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+            for (service in manager.getRunningServices(Int.MAX_VALUE)) {
+                if (MyBackgroundService::class.java.name == service.service.className) {
+                    return true
+                }
+            }
+            return false
+        }
+
+
         const val ACTION_UPDATE_PERIOD = "nonozi.freefamilytracking.UPDATE_PERIOD"
         const val EXTRA_PERIOD = "period"
+        const val NAME_KEY = "name"
+        const val GROUP_NAME_KEY = "groupName"
+
     }
+
+
+
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d("MyBackgroundService", "Starting service...")
         startForeground(1, createNotification()) // Ajoutez cette ligne pour démarrer le service en mode foreground
         val savedPeriod = intent?.getIntExtra(EXTRA_PERIOD, 60000) ?: 60000 // default 60 sec
         INTERVAL = savedPeriod.toLong()
+
+
+        savedName = intent?.getStringExtra(NAME_KEY) ?: "Unknown"
+        savedGroupName = intent?.getStringExtra(GROUP_NAME_KEY) ?: "Unknown"
+
+        Log.d("MyBackgroundService", "savedName=$savedName, savedGroupName=$savedGroupName")
+
+        // Initialize fusedLocationClient
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+
 
         if (intent != null && intent.action == ACTION_UPDATE_PERIOD) {
            var newPeriod = intent.getIntExtra(EXTRA_PERIOD, 3000)
@@ -64,38 +98,39 @@ class MyBackgroundService : Service() {
         return START_STICKY
 
 
+    } // OnStartCoomand
 
-
-    }
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
     }
 
     override fun onDestroy() {
+        Log.d("MyBackgroundService","Arrêt du service demandé, destruction des différentes instances")
         super.onDestroy()
         stopSendingLocationUpdates()
+        timer?.cancel()
     }
 
     private fun startSendingLocationUpdates() {
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        handler.postDelayed(object : Runnable {
+        val newtimer = Timer()
+        newtimer.scheduleAtFixedRate(object : TimerTask() {
             override fun run() {
-                Log.d("MyBackgroundService", "Sending location update with INTERVAL=$INTERVAL...")
+                Log.d("MyBackgroundService", "Sending location update...")
                 if (checkLocationPermission()) {
                     getLastLocation { location ->
                         location?.let {
                             currentLatitude = location.latitude
                             currentLongitude = location.longitude
                             Log.d("MyBackgroundService", "Latitude: $currentLatitude, Longitude: $currentLongitude")
-                            sendPostRequest("ExamplePhone")
+                            sendPostRequest()
                         }
                     }
                 }
-                handler.postDelayed(this, INTERVAL)
             }
-        }, INTERVAL)
-    } // private fun startsendinglocationupdates
+        }, 0, INTERVAL)
+    }
+
 
     private fun checkLocationPermission(): Boolean {
         return ActivityCompat.checkSelfPermission(
@@ -109,12 +144,10 @@ class MyBackgroundService : Service() {
     }
 
 
-    private fun sendPostRequest(phonename: String) {
+    private fun sendPostRequest() {
         val currentDateTime = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date())
-
         retrofitBuilder?.build(retrofitBuilder?.BASE_URL_POST)
-        val postRequestModel = PostRequestModel(phonename, currentLatitude.toString(), currentLongitude.toString(), currentDateTime)
-
+        val postRequestModel = PostRequestModel(savedName, savedGroupName, currentLatitude.toString(), currentLongitude.toString(), currentDateTime)
         val call = retrofitBuilder!!.callApi().postHeros(postRequestModel)
         Log.d("ApiCall", "Appel de l'API PostRequestModel")
         call!!.enqueue(object : Callback<PostResponseModel?> {
@@ -175,6 +208,8 @@ class MyBackgroundService : Service() {
             callback.invoke(null)
         }
     }
+
+
 
 }
 

@@ -26,46 +26,36 @@
         android:id="@+id/btnStartService"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="76dp"
+        android:layout_marginTop="44dp"
         android:text="Start service"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.095"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txtPeriod" />
+        app:layout_constraintTop_toBottomOf="@id/my_toolbar" />
+
 
     <Button
         android:id="@+id/btnStopService"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="76dp"
+        android:layout_marginTop="4dp"
         android:text="Stop service"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.888"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txtPeriod" />
-
-    <TextView
-        android:id="@+id/txtPeriod"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="Période par défaut"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/my_toolbar" />
-
+        app:layout_constraintHorizontal_bias="0.766"
+        app:layout_constraintStart_toEndOf="@id/btnStartService"
+        app:layout_constraintTop_toTopOf="@id/btnStartService" />
 
     <TextView
         android:id="@+id/txtResultValue"
-        android:layout_width="224dp"
-        android:layout_height="117dp"
-        android:layout_marginTop="168dp"
+        android:layout_width="168dp"
+        android:layout_height="53dp"
+        android:gravity="center"
+        android:layout_marginTop="24dp"
         android:text="Default Location"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txtPeriod" />
+        app:layout_constraintTop_toBottomOf="@id/btnStopService" />
 
     <ImageView
         android:id="@+id/backgroundImageView"

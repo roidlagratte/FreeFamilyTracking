@@ -48,8 +48,11 @@ import kotlinx.coroutines.launch
 import nonozi.freefamilytracking.DataStoreManager
 
 import nonozi.freefamilytracking.MyBackgroundService.Companion.EXTRA_PERIOD
+import nonozi.freefamilytracking.MyBackgroundService
+
 
 const val LOCATION_PERMISSION_REQUEST = 1001
+private lateinit var txtResultValue: TextView
 
 class MainActivity : AppCompatActivity() {
     private lateinit var dataStoreManager: DataStoreManager
@@ -75,9 +78,9 @@ class MainActivity : AppCompatActivity() {
         // Initialiser le DataStoreManager en tant que singleton
        // dataStoreManager = DataStoreManager.getInstance(this)
         dataStoreManager = DataStoreManager.getInstance(this)
-
-
-
+        txtResultValue = findViewById(R.id.txtResultValue)
+       // txtResultValue.text = "Service stopped"
+        updateServiceStatus(txtResultValue)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         //val sharedPreferences = getSharedPreferences("config", Context.MODE_PRIVATE)
@@ -99,27 +102,29 @@ class MainActivity : AppCompatActivity() {
                 try {
                     // Récupérer la période depuis le DataStore
                     val savedPeriod = dataStoreManager.readPeriod().first()
+                    // Récupérer savedName et savedGroupName depuis le DataStore
+                    val savedName = dataStoreManager.readName().first() ?: "Unknown"
+                    val savedGroupName = dataStoreManager.readGroupName().first() ?: "Unknown"
 
-                    // Démarrer le service avec l'intervalle récupéré
-                    val serviceIntent = Intent(this@MainActivity, MyBackgroundService::class.java)
-                    serviceIntent.putExtra(EXTRA_PERIOD, savedPeriod)
+                    // Démarrer le service avec l'intervalle récupéré et les valeurs de savedName et savedGroupName
+                    val serviceIntent = Intent(this@MainActivity, MyBackgroundService::class.java).apply {
+                        putExtra(EXTRA_PERIOD, savedPeriod)
+                        putExtra(NAME_KEY, savedName)
+                        putExtra(GROUP_NAME_KEY, savedGroupName)
+                    }
                     startService(serviceIntent)
-
-                    // Utilisez la valeur récupérée de readPeriod() si nécessaire
-                    // INTERVAL = savedPeriod.toLong()
+                    updateServiceStatus(txtResultValue)
 
                 } catch (e: Exception) {
                     Log.e("BTNSTARTSERVICE", "Error retrieving period from DataStore: ${e.message}")
                 }
             }
-
-
-
         }
 
 
         btnStopService.setOnClickListener {
             stopService(Intent(this, MyBackgroundService::class.java))
+            updateServiceStatus(txtResultValue)
         }
 
 
@@ -132,7 +137,10 @@ class MainActivity : AppCompatActivity() {
 
 
 
-
+    companion object {
+        const val NAME_KEY = "name"
+        const val GROUP_NAME_KEY = "groupName"
+    }
 
 
 
@@ -206,7 +214,13 @@ class MainActivity : AppCompatActivity() {
 
 
 
-
+    private fun updateServiceStatus(textView: TextView) {
+        if (MyBackgroundService.isServiceRunning(this)) {
+            textView.text = "Service is running"
+        } else {
+            textView.text = "Service stopped"
+        }
+    }
 
 
 
