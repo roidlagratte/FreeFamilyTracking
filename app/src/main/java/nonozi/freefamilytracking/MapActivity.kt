@@ -53,37 +53,16 @@ class MapActivity: AppCompatActivity() {
         mapView.overlays.add(marker)
 
 
-        /*
-          retrofitBuilder?.build(retrofitBuilder?.BASE_URL_POST)
-        val postRequestModel = PostRequestModel(savedName, savedGroupName, currentLatitude.toString(), currentLongitude.toString(), currentDateTime)
-        val call = retrofitBuilder!!.callApi().postHeros(postRequestModel)
-        Log.d("ApiCall", "Appel de l'API PostRequestModel")
-        call!!.enqueue(object : Callback<PostResponseModel?> {
-            override fun onResponse(call: Call<PostResponseModel?>, response: Response<PostResponseModel?>) {
-                val responseBody = response.body()
-                if (response.isSuccessful && responseBody != null) {
-                    // Ici, vous pouvez mettre le code pour traiter la réponse
-                } else {
-                    // Ici, vous pouvez mettre le code pour gérer l'erreur
-                }
-            }
-
-            override fun onFailure(call: Call<PostResponseModel?>, t: Throwable) {
-                // Ici, vous pouvez mettre le code pour gérer l'échec de la requête
-            }
-        })
-*/
-
 
         retrofitBuilder?.build(retrofitBuilder?.BASE_URL_POST)
         val postRequestMap = PostRequestMap("nonozi", "HQ7dJ9uw")
 
-        val call = retrofitBuilder!!.callApi().getCoordinates(postRequestMap)
+        val call: Call<List<PostResponseMap?>?>  = retrofitBuilder!!.callApi().getCoordinates(postRequestMap)
         Log.d("ApiCall", "Appel de l'API PostRequestModel")
-        call!!.enqueue(object : Callback<PostResponseMap?> {
+        call!!.enqueue(object :  Callback<List<PostResponseMap?>?> {
             override fun onResponse(
-                call: Call<PostResponseMap?>,
-                response: Response<PostResponseMap?>
+                call: Call<List<PostResponseMap?>?>,
+                response: Response<List<PostResponseMap?>?>
             ) {
                 val responseBody = response.body()
                 Log.d("Response", "OnResponse")
@@ -96,7 +75,7 @@ class MapActivity: AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<PostResponseMap?>, t: Throwable) {
+            override fun onFailure(call: Call<List<PostResponseMap?>?>, t: Throwable) {
                 t.printStackTrace()
 
                 // Enregistrer l'exception dans les logs
@@ -107,44 +86,7 @@ class MapActivity: AppCompatActivity() {
             }
         })
 
-        /*
-        val retrofitBuilder = RetrofitBuilder.instance
-        retrofitBuilder?.build(retrofitBuilder.BASE_URL_POST)
-        val apiInterface = retrofitBuilder?.apiInterface
-        val apiCalls = retrofitBuilder?.callApi()
-        val RequestMap = PostRequestMap("nonozi","HQ7dJ9uw")
-        apiCalls?.getCoordinates(RequestMap)?.enqueue(object : Callback<PostResponseMap?> {
-            override fun onResponse(call: Call<PostResponseMap?>, response: Response<PostResponseMap?>) {
-                if (response.isSuccessful) {
-                    val postResponseMap = response.body()
-                    postResponseMap?.let {
-                        val latitude = it.latitude
-                        val longitude = it.longitude
-                        if (latitude != null && longitude != null) {
-                            Log.d("MapActivity", "latitude=$latitude et longitude=$longitude")
-                            val newPoint = GeoPoint(latitude, longitude)
-                            // Mettre à jour le marqueur avec les nouvelles coordonnées
-                            marker.position = newPoint
-                            mapView.invalidate() // Rafraîchir la carte pour afficher le nouveau marqueur
-                            // Centrer la carte sur les nouvelles coordonnées si nécessaire
-                            mapView.controller.setCenter(newPoint)
-                        } else {
-                            Log.d("MapActivity", "Latitude et Longitude nulles")
-                            // Gérer les valeurs de latitude ou de longitude nulles
-                        }
-                    }
-                } else {
-                    // Gérer les erreurs de réponse
-                    // Afficher un message à l'utilisateur par exemple
-                }
-            } // overrride onResponse
 
-
-
-            override fun onFailure(call: Call<PostResponseMap?>, t: Throwable) {
-                // Gérer l'échec de l'appel API
-            }
-        }) */
     }
 
 

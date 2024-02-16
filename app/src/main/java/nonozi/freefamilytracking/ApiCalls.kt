@@ -11,7 +11,7 @@ class ApiCalls(private val apiInterface: ApiInterface) {
         return apiInterface.postHeros(postRequestModel)
     }
 
-    fun getCoordinates(postRequestMap: PostRequestMap?): Call<PostResponseMap?>? {
+    fun getCoordinates(postRequestMap: PostRequestMap?): Call<List<PostResponseMap?>?> {
         return apiInterface.getCoordinates(postRequestMap)
     }
 

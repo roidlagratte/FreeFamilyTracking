@@ -16,5 +16,5 @@ interface ApiInterface {
 
 
     @POST("/api/getcoordinates.php")
-    fun getCoordinates(@Body postRequestMap: PostRequestMap?): Call<PostResponseMap?>?
+    fun getCoordinates(@Body postRequestMap: PostRequestMap?): Call<List<PostResponseMap?>?>
 }
