@@ -1,5 +1,6 @@
 package nonozi.freefamilytracking
 
+import android.util.Log
 import retrofit2.Call
 
 class ApiCalls(private val apiInterface: ApiInterface) {
@@ -13,5 +14,7 @@ class ApiCalls(private val apiInterface: ApiInterface) {
     fun getCoordinates(postRequestMap: PostRequestMap?): Call<PostResponseMap?>? {
         return apiInterface.getCoordinates(postRequestMap)
     }
+
+
 
 }

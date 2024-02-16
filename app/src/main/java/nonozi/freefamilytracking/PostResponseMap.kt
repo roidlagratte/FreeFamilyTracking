@@ -1,13 +1,15 @@
 package nonozi.freefamilytracking
 
 class PostResponseMap(
-    public var latitude: String,
-    public var longitude: String,
-    private var phonename: String,
+    private  val id: Int,
+    public   val latitude: Double?,
+    public  val longitude: Double?,
+    private  val name: String
 ) {
     override fun toString(): String {
-        return "phonename=" + phonename + "\n" +
-                "\t" + "lat=" + latitude + "\n" +
-                "\t" + "lon=" + longitude
+        return "id=$id\n" +
+                "\t" + "name=$name\n" +
+                "\t" + "latitude=$latitude\n" +
+                "\t" + "longitude=$longitude"
     }
 }

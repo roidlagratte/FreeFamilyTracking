@@ -1,5 +1,6 @@
 package nonozi.freefamilytracking
 
 data class PostRequestMap(
-    val phonename: String
+    val name: String,
+    val groupname: String
 )

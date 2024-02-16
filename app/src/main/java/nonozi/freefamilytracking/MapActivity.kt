@@ -11,6 +11,7 @@ import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat.startActivity
 import org.osmdroid.config.Configuration
@@ -20,11 +21,12 @@ import org.osmdroid.views.overlay.Marker
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import nonozi.freefamilytracking.PostRequestMap
 
 class MapActivity: AppCompatActivity() {
     private lateinit var mapView: MapView
     private lateinit var marker: Marker
-
+    private var retrofitBuilder: RetrofitBuilder? = RetrofitBuilder.instance
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
@@ -51,23 +53,73 @@ class MapActivity: AppCompatActivity() {
         mapView.overlays.add(marker)
 
 
+        /*
+          retrofitBuilder?.build(retrofitBuilder?.BASE_URL_POST)
+        val postRequestModel = PostRequestModel(savedName, savedGroupName, currentLatitude.toString(), currentLongitude.toString(), currentDateTime)
+        val call = retrofitBuilder!!.callApi().postHeros(postRequestModel)
+        Log.d("ApiCall", "Appel de l'API PostRequestModel")
+        call!!.enqueue(object : Callback<PostResponseModel?> {
+            override fun onResponse(call: Call<PostResponseModel?>, response: Response<PostResponseModel?>) {
+                val responseBody = response.body()
+                if (response.isSuccessful && responseBody != null) {
+                    // Ici, vous pouvez mettre le code pour traiter la réponse
+                } else {
+                    // Ici, vous pouvez mettre le code pour gérer l'erreur
+                }
+            }
+
+            override fun onFailure(call: Call<PostResponseModel?>, t: Throwable) {
+                // Ici, vous pouvez mettre le code pour gérer l'échec de la requête
+            }
+        })
+*/
+
+
+        retrofitBuilder?.build(retrofitBuilder?.BASE_URL_POST)
+        val postRequestMap = PostRequestMap("nonozi", "HQ7dJ9uw")
+
+        val call = retrofitBuilder!!.callApi().getCoordinates(postRequestMap)
+        Log.d("ApiCall", "Appel de l'API PostRequestModel")
+        call!!.enqueue(object : Callback<PostResponseMap?> {
+            override fun onResponse(
+                call: Call<PostResponseMap?>,
+                response: Response<PostResponseMap?>
+            ) {
+                val responseBody = response.body()
+                Log.d("Response", "OnResponse")
+                if (response.isSuccessful && responseBody != null) {
+                    Log.d("Response", "Response is $responseBody")
+                    // Ici, vous pouvez mettre le code pour traiter la réponse
+                } else {
+                    Log.d("Response", "Response Erreur")
+                    // Ici, vous pouvez mettre le code pour gérer l'erreur
+                }
+            }
+
+            override fun onFailure(call: Call<PostResponseMap?>, t: Throwable) {
+                t.printStackTrace()
+
+                // Enregistrer l'exception dans les logs
+                Log.e("MapActivity", "Erreur lors de la requête API", t)
+
+                // Vous pouvez également afficher un message Toast pour informer l'utilisateur de l'échec de la requête
+                Toast.makeText(this@MapActivity, "Erreur lors de la requête API: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+        /*
         val retrofitBuilder = RetrofitBuilder.instance
         retrofitBuilder?.build(retrofitBuilder.BASE_URL_POST)
-
         val apiInterface = retrofitBuilder?.apiInterface
-        // Network call
         val apiCalls = retrofitBuilder?.callApi()
-
-        val RequestMap = PostRequestMap("examplePhone")
+        val RequestMap = PostRequestMap("nonozi","HQ7dJ9uw")
         apiCalls?.getCoordinates(RequestMap)?.enqueue(object : Callback<PostResponseMap?> {
-
-
             override fun onResponse(call: Call<PostResponseMap?>, response: Response<PostResponseMap?>) {
                 if (response.isSuccessful) {
                     val postResponseMap = response.body()
                     postResponseMap?.let {
-                        val latitude = it.latitude?.toDoubleOrNull()
-                        val longitude = it.longitude?.toDoubleOrNull()
+                        val latitude = it.latitude
+                        val longitude = it.longitude
                         if (latitude != null && longitude != null) {
                             Log.d("MapActivity", "latitude=$latitude et longitude=$longitude")
                             val newPoint = GeoPoint(latitude, longitude)
@@ -92,7 +144,7 @@ class MapActivity: AppCompatActivity() {
             override fun onFailure(call: Call<PostResponseMap?>, t: Throwable) {
                 // Gérer l'échec de l'appel API
             }
-        })
+        }) */
     }
 
 

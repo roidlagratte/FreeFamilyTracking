@@ -48,7 +48,7 @@ import kotlinx.coroutines.launch
 import nonozi.freefamilytracking.DataStoreManager
 
 import nonozi.freefamilytracking.MyBackgroundService.Companion.EXTRA_PERIOD
-import nonozi.freefamilytracking.MyBackgroundService
+
 
 
 const val LOCATION_PERMISSION_REQUEST = 1001
