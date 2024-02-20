@@ -14,6 +14,7 @@ import android.location.Location
 import android.os.Build
 import android.os.Handler
 import android.os.IBinder
+import android.os.PowerManager
 import android.util.Log
 import android.widget.TextView
 
@@ -82,6 +83,10 @@ class MyBackgroundService : Service() {
 
         Log.d("MyBackgroundService", "savedName=$savedName, savedGroupName=$savedGroupName")
 
+
+
+
+
         // Initialize fusedLocationClient
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
@@ -107,12 +112,18 @@ class MyBackgroundService : Service() {
 
     override fun onDestroy() {
         Log.d("MyBackgroundService","Arrêt du service demandé, destruction des différentes instances")
+       /* if (wakeLock.isHeld) {
+            wakeLock.release()
+            Log.d("MyBackgroundService", "Wake lock libéré")
+        } */
+
         super.onDestroy()
         stopSendingLocationUpdates()
+
         timer?.cancel()
     }
 
-    private fun startSendingLocationUpdates() {
+    /* private fun startSendingLocationUpdates() {
         val newtimer = Timer()
         newtimer.scheduleAtFixedRate(object : TimerTask() {
             override fun run() {
@@ -129,7 +140,31 @@ class MyBackgroundService : Service() {
                 }
             }
         }, 0, INTERVAL)
+    } */
+    private val locationUpdateRunnable = object : Runnable {
+        override fun run() {
+            Log.d("MyBackgroundService", "Sending location update...")
+            if (checkLocationPermission()) {
+                getLastLocation { location ->
+                    location?.let {
+                        currentLatitude = location.latitude
+                        currentLongitude = location.longitude
+                        Log.d("MyBackgroundService", "Latitude: $currentLatitude, Longitude: $currentLongitude")
+                        sendPostRequest()
+                    }
+                }
+            }
+            handler.postDelayed(this, INTERVAL)
+        }
     }
+
+    private fun startSendingLocationUpdates() {
+
+        // wakeLock.acquire()
+        Log.d("MyBackgroundService", "Wake lock acquired")
+        handler.post(locationUpdateRunnable)
+    }
+
 
 
     private fun checkLocationPermission(): Boolean {
@@ -141,6 +176,16 @@ class MyBackgroundService : Service() {
 
     private fun stopSendingLocationUpdates() {
         handler.removeCallbacksAndMessages(null)
+    }
+
+
+    interface LocationUpdateListener {
+        fun onLocationUpdate(dateTime: String)
+    }
+
+    // Interface de rappel pour mon activité principale
+    interface PostRequestListener {
+        fun onPostRequest(dateTime: String)
     }
 
 
@@ -166,7 +211,7 @@ class MyBackgroundService : Service() {
         })
     }
 
-    private fun createNotification(): Notification {
+    /* private fun createNotification(): Notification {
         createNotificationChannel()
         val intent = Intent(this, MainActivity::class.java)
         intent.action = Intent.ACTION_MAIN
@@ -183,7 +228,35 @@ class MyBackgroundService : Service() {
             .setSmallIcon(R.drawable.ic_launcher_breizh)
             .setContentIntent(pendingIntent)
             .build()
+    } */
+    private fun createNotification(): Notification {
+        createNotificationChannel()
+        val intent = Intent(this, MainActivity::class.java)
+        intent.action = Intent.ACTION_MAIN
+        intent.addCategory(Intent.CATEGORY_LAUNCHER)
+        val pendingIntent = PendingIntent.getActivity(
+            this,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        return NotificationCompat.Builder(this, channelId)
+            .setContentTitle("Free Family Tracking")
+            .setContentText("Start service")
+            .setSmallIcon(R.drawable.ic_launcher_breizh)
+            .setContentIntent(pendingIntent)
+            .build()
     }
+
+
+
+
+
+
+
+
+
+
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(

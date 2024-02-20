@@ -88,15 +88,37 @@
         app:layout_constraintStart_toEndOf="@id/edtGroupName"
         app:layout_constraintTop_toTopOf="@id/edtGroupName" />
 
+
+    <Button
+        android:id="@+id/btnChooseImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Choisir une image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtGroupName" />
+
+    <ImageView
+        android:id="@+id/imgSelectedImage"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnChooseImage" />
+
+
     <Button
         android:id="@+id/btnSavePeriod"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="132dp"
         android:text="Enregistrer la période"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txtGroupName" />
+        app:layout_constraintTop_toBottomOf="@id/imgSelectedImage" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

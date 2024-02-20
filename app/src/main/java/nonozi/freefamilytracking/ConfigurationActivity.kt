@@ -1,16 +1,24 @@
 package nonozi.freefamilytracking
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
@@ -31,10 +39,25 @@ class ConfigurationActivity : AppCompatActivity() {
     private lateinit var edtName: EditText
     private lateinit var edtGroupName: EditText
 
+    // image
+    private lateinit var btnChooseImage: Button
+    private lateinit var imgSelectedImage: ImageView
+
+
+
+
     val PERIOD_KEY = intPreferencesKey("period")
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_configuration)
+
+
+        btnChooseImage = findViewById(R.id.btnChooseImage)
+
+
         val toolbar: Toolbar =findViewById(R.id.my_toolbar)
         setSupportActionBar(toolbar)
 
@@ -102,30 +125,6 @@ class ConfigurationActivity : AppCompatActivity() {
                     }
                 }
             }
-
-
-            // Enregistrer la valeur lors du clic sur le bouton
-/*            btnSavePeriod.setOnClickListener {
-                val period = edtPeriod.text.toString().toIntOrNull()
-                val name = edtName.text.toString()
-                val groupName = edtGroupName.text.toString()
-                if (period != null && name.isNotEmpty() && groupName.isNotEmpty()) {
-                    // Enregistrer la période dans le DataStore
-                    lifecycleScope.launch {
-                            dataStoreManager.saveConfiguration(period, name, groupName)
-                       // notifyService(period)
-                    } // lifecyclescope
-                    txtSavedValue.text = "$period"
-                    txtName.text = "$name"
-                    txtGroupName.text = "$groupName"
-                } else {
-                    // Gérer le cas où la saisie n'est pas un nombre valide
-                    Toast.makeText(this@ConfigurationActivity, "Veuillez remplir tous les champs correctement", Toast.LENGTH_SHORT).show()
-
-                } // else-if
-            } // btnSavePeriod
-            */
-
         } // lifecycleScope
     } // OnCreate
 
@@ -160,6 +159,18 @@ class ConfigurationActivity : AppCompatActivity() {
     }
 
 
+
+
+
+
+
+
+
+
+
+    companion object {
+        private const val PICK_IMAGE_REQUEST = 1
+    }
 
 
 }

@@ -13,6 +13,21 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class DataStoreManager(private val context: Context) {
+
+    val IMAGE_PATH_KEY = stringPreferencesKey("imagePath")
+
+    suspend fun saveImagePath(imagePath: String) {
+        Log.d("DataStoreManager", "Enregistrement du chemin de l'image $imagePath dans le DataStore")
+        context.dataStore.edit { preferences ->
+            preferences[IMAGE_PATH_KEY] = imagePath
+        }
+    }
+    suspend fun readImagePath(): Flow<String?> {
+        return context.dataStore.data.map { preferences ->
+            preferences[IMAGE_PATH_KEY]
+        }
+    }
+
     suspend fun readPeriod(): Flow<Int> {
         return context.dataStore.data.map { preferences ->
             preferences[PERIOD_KEY] ?: 0
